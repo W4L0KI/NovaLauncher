@@ -11,6 +11,7 @@ const SGDB_BASE_URL = 'https://www.steamgriddb.com/api/v2';
 const CONFIG_FILE = path.join(app.getPath('userData'), 'config.json');
 const THUMB_DIR = path.join(app.getPath('userData'), 'cache', 'thumbs');
 const COVER_CACHE_DIR = path.join(app.getPath('userData'), 'cache', 'covers');
+const APP_ICON = path.join(app.getAppPath(), '.generated-icons', 'icon.png');
 
 const EXCLUDED_DIRS = new Set(['node_modules','.git','dist','build','launcher','logs','_redist','_commonredist','redist','redistributables','directx','vcredist','crashreportclient','crashes','nodvd','crack','online fix','_windows 7 fix']);
 const BAD_EXE_WORDS = ['setup','install','uninstall','unins','vcredist','vc_redist','dxsetup','crash','unitycrashhandler','ue4crashreporter','benchmark','server','editor','eac','easyanticheat','launcher','helper','redistributable'];
@@ -222,8 +223,10 @@ async function scanGames(){
   return {gamesDir:config.gamesDir,games,settings:{hasSgdbKey:!!config.steamGridDbApiKey,autoFetchCovers:config.autoFetchCovers}};
 }
 function createWindow(){
-  const win = new BrowserWindow({width:1380,height:860,minWidth:980,minHeight:680,backgroundColor:'#070914',title:'Nova Launcher',titleBarStyle:'hidden',titleBarOverlay:{color:'#070914',symbolColor:'#f5f7ff',height:42},webPreferences:{preload:path.join(__dirname,'preload.js'),contextIsolation:true,nodeIntegration:false}});
+  const win = new BrowserWindow({width:1380,height:860,minWidth:980,minHeight:680,show:false,icon:APP_ICON,backgroundColor:'#070914',title:'Nova Launcher',titleBarStyle:'hidden',titleBarOverlay:{color:'#070914',symbolColor:'#f5f7ff',height:42},webPreferences:{preload:path.join(__dirname,'preload.js'),contextIsolation:true,nodeIntegration:false}});
+  win.maximize();
   win.loadFile(path.join(__dirname,'index.html'));
+  win.once('ready-to-show',()=>win.show());
 }
 app.whenReady().then(()=>{ createWindow(); app.on('activate',()=>{ if(BrowserWindow.getAllWindows().length===0) createWindow(); }); });
 app.on('window-all-closed',()=>{ if(process.platform!=='darwin') app.quit(); });
