@@ -59,4 +59,4 @@ heroPlay.addEventListener('click',()=>launch(selected));
 heroCover.addEventListener('click',()=>refreshSelectedCover(selected));
 searchInput.addEventListener('input',render);
 document.querySelectorAll('.nav-item').forEach(btn=>btn.addEventListener('click',()=>{document.querySelectorAll('.nav-item').forEach(b=>b.classList.remove('active'));btn.classList.add('active');filter=btn.dataset.filter;render()}));
-loadSettings().then(()=>scan(true));
+if(window.nova&&typeof window.nova.getSettings==='function'){loadSettings().then(()=>scan(true));}else{statusText.textContent='Mode aperçu UI';render();}
