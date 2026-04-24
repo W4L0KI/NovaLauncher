@@ -10,7 +10,45 @@ function coverLabel(g){if(g.coverSource==='steamgriddb'||g.coverSource==='steamg
 function selectGame(g){selected=g;heroTitle.textContent=g.name;heroLabel.textContent=g.status==='ready'?'Prêt à lancer':'Executable non trouvé';heroText.textContent=(g.exe||'Aucun .exe fiable trouvé automatiquement. Ouvre le dossier et vérifie le nom de l’exécutable.')+` • ${coverLabel(g)}`;heroPlay.disabled=g.status!=='ready';updateApiUi();render()}
 async function launch(g){if(!g||g.status!=='ready')return toast('Executable introuvable');const r=await window.nova.launchGame(g);toast(r.ok?`Lancement de ${g.name}`:(r.error||'Erreur au lancement'));await scan(false)}
 async function refreshSelectedCover(g=selected){if(!g)return;toast(`Recherche de cover pour ${g.name}...`);const r=await window.nova.refreshCover(g);if(!r.ok)return toast(r.error||'Aucune cover trouvée');toast(`Cover trouvée : ${r.match||g.name}`);await scan(false);const updated=allGames.find(x=>x.id===g.id);if(updated)selectGame(updated)}
-function render(){const games=filtered();gameCount.textContent=`${games.length} jeu${games.length>1?'x':''}`;grid.innerHTML='';if(!games.length){grid.innerHTML='<div class="empty"><div><h3>Aucun jeu trouvé</h3><p>Vérifie le dossier sélectionné ou ta recherche.</p></div></div>';return}for(const g of games){const cover=fileUrl(g.cover);const card=document.createElement('article');card.className='game-card';const style=cover?`background-image:url(\'${cover}\')`:`background:${gradientFor(g.id)}`;card.innerHTML=`<div class="cover ${cover?'':'placeholder'}" style="${style}">${cover?'':`<span>${initials(g.name)}</span>`}</div><div class="card-body"><h3 class="card-title">${g.name}</h3><div class="card-actions"><button class="card-btn" ${g.status!=='ready'?'disabled':''}>Jouer</button><button class="icon-btn fav ${g.favorite?'active':''}" title="Favori">★</button><button class="icon-btn folder" title="Ouvrir le dossier">↗</button></div></div>`;card.addEventListener('click',e=>{if(e.target.closest('button'))return;selectGame(g)});card.querySelector('.card-btn').addEventListener('click',()=>launch(g));card.querySelector('.folder').addEventListener('click',()=>window.nova.openFolder(g.root));card.querySelector('.fav').addEventListener('click',async()=>{await window.nova.toggleFavorite(g.id);await scan(false)});if(selected?.id===g.id)card.style.outline='2px solid rgba(139,92,246,.75)';grid.appendChild(card)}}
+function render(){
+  const games=filtered();
+  gameCount.textContent=`${games.length} jeu${games.length>1?'x':''}`;
+  grid.innerHTML='';
+  if(!games.length){
+    grid.innerHTML='<div class="empty"><div><h3>Aucun jeu trouvé</h3><p>Vérifie le dossier sélectionné ou ta recherche.</p></div></div>';
+    return;
+  }
+
+  for(const g of games){
+    const cover=fileUrl(g.cover);
+    const card=document.createElement('article');
+    card.className='game-card';
+
+    card.innerHTML=`
+      <div class="cover ${cover?'has-image':'placeholder'}">
+        ${cover
+          ? `<img src="${cover}" alt="Cover de ${g.name}" loading="lazy" />`
+          : `<span>${initials(g.name)}</span>`}
+      </div>
+      <div class="card-body">
+        <h3 class="card-title">${g.name}</h3>
+        <div class="card-actions">
+          <button class="card-btn" ${g.status!=='ready'?'disabled':''}>Jouer</button>
+          <button class="icon-btn fav ${g.favorite?'active':''}" title="Favori">★</button>
+          <button class="icon-btn folder" title="Ouvrir le dossier">↗</button>
+        </div>
+      </div>`;
+
+    card.addEventListener('click',e=>{if(e.target.closest('button'))return;selectGame(g)});
+    card.querySelector('.card-btn').addEventListener('click',()=>launch(g));
+    card.querySelector('.folder').addEventListener('click',()=>window.nova.openFolder(g.root));
+    card.querySelector('.fav').addEventListener('click',async()=>{await window.nova.toggleFavorite(g.id);await scan(false)});
+
+    if(selected?.id===g.id) card.classList.add('selected');
+    grid.appendChild(card);
+  }
+}
+
 async function loadSettings(){settings=await window.nova.getSettings();updateApiUi()}
 async function scan(show=true){if(show)statusText.textContent=settings.hasSgdbKey&&settings.autoFetchCovers?'Scan + recherche covers API...':'Scan en cours...';try{const data=await window.nova.scanGames();allGames=data.games;settings={...settings,...data.settings};gamesDirEl.textContent=data.gamesDir;statusText.textContent=`${data.games.filter(g=>g.status==='ready').length} prêt(s), ${data.games.filter(g=>g.status!=='ready').length} à corriger`;updateApiUi();if(!selected&&allGames.length)selectGame(allGames[0]);else{const refreshed=selected?allGames.find(g=>g.id===selected.id):null;if(refreshed)selected=refreshed;render()}}catch(e){statusText.textContent='Erreur de scan';toast(e.message)}}
 $('#refreshBtn').addEventListener('click',()=>scan(true));
