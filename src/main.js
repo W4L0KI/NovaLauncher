@@ -223,7 +223,7 @@ async function scanGames(){
   return {gamesDir:config.gamesDir,games,settings:{hasSgdbKey:!!config.steamGridDbApiKey,autoFetchCovers:config.autoFetchCovers}};
 }
 function createWindow(){
-  const win = new BrowserWindow({width:1380,height:860,minWidth:980,minHeight:680,show:false,icon:APP_ICON,backgroundColor:'#070914',title:'Nova Launcher',titleBarStyle:'hidden',titleBarOverlay:{color:'#070914',symbolColor:'#f5f7ff',height:42},webPreferences:{preload:path.join(__dirname,'preload.js'),contextIsolation:true,nodeIntegration:false}});
+  const win = new BrowserWindow({width:1380,height:860,minWidth:980,minHeight:680,show:false,backgroundColor:'#070914',title:'Nova Launcher',titleBarStyle:'hidden',titleBarOverlay:{color:'#070914',symbolColor:'#f5f7ff',height:42},webPreferences:{preload:path.join(__dirname,'preload.js'),contextIsolation:true,nodeIntegration:false}});
   win.maximize();
   win.loadFile(path.join(__dirname,'index.html'));
   win.once('ready-to-show',()=>win.show());
