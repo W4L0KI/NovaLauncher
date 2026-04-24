@@ -1,0 +1,43 @@
+{
+  "name": "nova-games-launcher",
+  "version": "1.0.0",
+  "description": "Modern local games launcher for Windows with SteamGridDB covers",
+  "main": "src/main.js",
+  "author": "Walid",
+  "license": "MIT",
+  "scripts": {
+    "start": "electron .",
+    "dist": "electron-builder --win nsis portable",
+    "build": "electron-builder --win nsis portable"
+  },
+  "devDependencies": {
+    "electron": "^31.7.7",
+    "electron-builder": "^24.13.3"
+  },
+  "build": {
+    "appId": "com.walid.novalauncher",
+    "productName": "Nova Launcher",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "src/**/*",
+      "assets/**/*",
+      "package.json"
+    ],
+    "win": {
+      "target": [
+        "nsis",
+        "portable"
+      ],
+      "artifactName": "Nova-Launcher-${version}-${arch}.${ext}"
+    },
+    "nsis": {
+      "oneClick": false,
+      "allowToChangeInstallationDirectory": true,
+      "createDesktopShortcut": true,
+      "createStartMenuShortcut": true,
+      "shortcutName": "Nova Launcher"
+    }
+  }
+}

@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8" />
+  <meta http-equiv="Content-Security-Policy" content="default-src 'self' file: data:; img-src 'self' file: data:; style-src 'self' 'unsafe-inline'; script-src 'self';" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nova Launcher</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <div class="brand"><div class="brand-logo">N</div><div><h1>Nova</h1><p>Game Launcher</p></div></div>
+      <nav class="nav">
+        <button class="nav-item active" data-filter="all">Tous les jeux</button>
+        <button class="nav-item" data-filter="favorites">Favoris</button>
+        <button class="nav-item" data-filter="ready">Prêts</button>
+        <button class="nav-item" data-filter="missing">À corriger</button>
+      </nav>
+      <div class="sidebar-card"><span class="muted">Dossier actuel</span><strong id="gamesDir">D:\Games</strong><button id="chooseDir" class="secondary-btn">Changer</button></div>
+      <div class="sidebar-card api-card"><span class="muted">SteamGridDB API</span><strong id="apiStatus">Aucune clé configurée</strong><input id="apiKeyInput" class="api-input" placeholder="Coller ta clé API" type="password" autocomplete="off" /><button id="saveApiKey" class="secondary-btn">Enregistrer la clé</button><button id="autoCoversBtn" class="secondary-btn">Covers auto : ON</button></div>
+    </aside>
+    <main class="main">
+      <header class="topbar">
+        <div><p class="eyebrow">Bibliothèque locale</p><h2>Choisis ton jeu</h2></div>
+        <div class="actions"><div class="search-wrap"><span>⌕</span><input id="searchInput" placeholder="Rechercher un jeu..." autocomplete="off" /></div><button id="refreshBtn" class="primary-btn">Rescanner</button></div>
+      </header>
+      <section class="hero" id="hero"><div><p id="heroLabel" class="eyebrow">Prêt</p><h3 id="heroTitle">Sélectionne un jeu</h3><p id="heroText">Le launcher détecte automatiquement les dossiers ajoutés dans ton dossier Games à chaque démarrage. Avec une clé SteamGridDB, les covers se téléchargent automatiquement.</p></div><div class="hero-actions"><button id="heroCover" class="secondary-btn" disabled>Cover API</button><button id="heroPlay" class="play-big" disabled>Jouer</button></div></section>
+      <div class="library-meta"><span id="gameCount">0 jeu</span><span id="statusText">Scan en cours...</span></div>
+      <section id="grid" class="grid"></section>
+    </main>
+  </div>
+  <div id="toast" class="toast"></div>
+  <script src="renderer.js"></script>
+</body>
+</html>
