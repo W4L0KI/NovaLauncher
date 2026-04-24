@@ -11,6 +11,7 @@ const SGDB_BASE_URL = 'https://www.steamgriddb.com/api/v2';
 const CONFIG_FILE = path.join(app.getPath('userData'), 'config.json');
 const THUMB_DIR = path.join(app.getPath('userData'), 'cache', 'thumbs');
 const COVER_CACHE_DIR = path.join(app.getPath('userData'), 'cache', 'covers');
+const APP_ICON = path.join(app.getAppPath(), '.generated-icons', 'icon.png');
 
 const EXCLUDED_DIRS = new Set(['node_modules','.git','dist','build','launcher','logs','_redist','_commonredist','redist','redistributables','directx','vcredist','crashreportclient','crashes','nodvd','crack','online fix','_windows 7 fix']);
 const BAD_EXE_WORDS = ['setup','install','uninstall','unins','vcredist','vc_redist','dxsetup','crash','unitycrashhandler','ue4crashreporter','benchmark','server','editor','eac','easyanticheat','launcher','helper','redistributable'];

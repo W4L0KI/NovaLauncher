@@ -8,7 +8,10 @@
   "scripts": {
     "start": "electron .",
     "dist": "electron-builder --win nsis portable",
-    "build": "electron-builder --win nsis portable"
+    "build": "electron-builder --win nsis portable",
+    "prestart": "node scripts/generate-icons.js",
+    "prebuild": "node scripts/generate-icons.js",
+    "predist": "node scripts/generate-icons.js"
   },
   "devDependencies": {
     "electron": "^31.7.7",
@@ -30,7 +33,8 @@
         "nsis",
         "portable"
       ],
-      "artifactName": "Nova-Launcher-${version}-${arch}.${ext}"
+      "artifactName": "Nova-Launcher-${version}-${arch}.${ext}",
+      "icon": ".generated-icons/icon.ico"
     },
     "nsis": {
       "oneClick": false,
@@ -38,6 +42,7 @@
       "createDesktopShortcut": true,
       "createStartMenuShortcut": true,
       "shortcutName": "Nova Launcher"
-    }
+    },
+    "icon": ".generated-icons/icon.ico"
   }
 }
